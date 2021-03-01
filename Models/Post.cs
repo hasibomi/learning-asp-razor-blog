@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Blog.Models
 {
-    class Post
+    public class Post
     {
         public int ID { get; set; }
         public string Banner { get; set; }

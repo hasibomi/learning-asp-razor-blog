@@ -3,7 +3,7 @@ using Blog.Models;
 
 namespace Blog.Data
 {
-    class BlogDbContext : DbContext
+    public class BlogDbContext : DbContext
     {
         public BlogDbContext(
             DbContextOptions<BlogDbContext> options

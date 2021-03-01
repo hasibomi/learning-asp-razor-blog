@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Blog.Models
 {
-    class User
+    public class User
     {
         public int ID { get; set; }
         [Required]
