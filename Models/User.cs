@@ -1,22 +1,16 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace Blog.Models
 {
-    public class User
+    public class User : IdentityUser<Guid>
     {
-        public int ID { get; set; }
         [Required]
         public string FirstName { get; set; }
         [Required]
         public string LastName { get; set; }
-        [Required]
-        public string Username { get; set; }
-        [Required]
-        public string Email { get; set; }
-        [Required]
-        public string Password { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
 

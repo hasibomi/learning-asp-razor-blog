@@ -19,7 +19,6 @@ namespace Blog.Models
 
         public List<Post> Posts { get; }
 
-        public int UserId { get; }
         public User User { get; }
 
         public Post()

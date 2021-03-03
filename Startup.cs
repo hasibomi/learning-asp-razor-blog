@@ -29,6 +29,11 @@ namespace Blog
             services.AddDbContext<BlogDbContext>(
                 options => options.UseMySQL(Configuration.GetConnectionString("BlogDbContext"))
             );
+            //services.AddIdentity();
+            services.ConfigureApplicationCookie(options => {
+                options.LoginPath = "/Login";
+                options.LogoutPath = "/Logout";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +55,7 @@ namespace Blog
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
