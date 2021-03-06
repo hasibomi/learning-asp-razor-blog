@@ -9,7 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 using Blog.Data;
+using Blog.Models;
 
 namespace Blog
 {
@@ -29,7 +31,10 @@ namespace Blog
             services.AddDbContext<BlogDbContext>(
                 options => options.UseMySQL(Configuration.GetConnectionString("BlogDbContext"))
             );
-            //services.AddIdentity();
+            services.AddIdentity<User, IdentityRole<Guid>>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<BlogDbContext>();
             services.ConfigureApplicationCookie(options => {
                 options.LoginPath = "/Login";
                 options.LogoutPath = "/Logout";

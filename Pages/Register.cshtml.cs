@@ -1,6 +1,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 using Blog.Data;
 using Blog.Models;
 
@@ -8,13 +10,46 @@ namespace Blog.Pages
 {
     public class RegisterModel : PageModel
     {
-        private readonly BlogDbContext _context;
-        [BindProperty]
-        public new User User { get; set; }
+        private readonly UserManager<User> _userManager;
 
-        public RegisterModel(BlogDbContext context)
+        [BindProperty]
+        public InputModel Input { get; set; }
+
+        public RegisterModel(UserManager<User> userManager)
         {
-            _context = context;
+            _userManager = userManager;
+        }
+
+        public class InputModel
+        {
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "First Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Last Name")]
+            public string LastName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Username")]
+            public string UserName { get; set; }
+
+            [Required]
+            [DataType(DataType.EmailAddress)]
+            public string Email { get; set; }
+
+            [Required]
+            [DataType(DataType.Password)]
+            public string Password { get; set; }
+
+            [Required]
+            [DataType(DataType.Password)]
+            [Display(Name = "Confirm Password")]
+            [Compare("Password", ErrorMessage = "The password and confirm password do not match")]
+            public string ConfirmPassword { get; set; }
         }
 
         public void OnGet()
@@ -28,10 +63,25 @@ namespace Blog.Pages
                 return Page();
             }
 
-            _context.User.Add(User);
-            await _context.SaveChangesAsync();
+            var user = new User
+            {
+                FirstName = Input.FirstName,
+                LastName = Input.LastName,
+                UserName = Input.UserName,
+                Email = Input.Email,
+            };
+            var result = await _userManager.CreateAsync(user, Input.Password);
 
-            return RedirectToPage("/Index");
+            if (result.Succeeded)
+            {
+                return RedirectToPage("/Index");
+            }
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return Page();
         }
     }
 }
